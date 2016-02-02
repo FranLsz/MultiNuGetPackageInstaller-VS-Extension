@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="MultiNuGetPackageInstaller.Francisco López Sánchez.4af2a5e2-873b-4b9f-bfaa-9db23850dabc" Version="0.0.2" Language="en-US" Publisher="Francisco López Sánchez" />
+    <DisplayName>Multi NuGet Package Installer</DisplayName>
+    <Description xml:space="preserve">Install multiple NuGet packages on your current solution.</Description>
+    <License>License.txt</License>
+    <Icon>Resources\img\logo\mnpi_50.png</Icon>
+    <PreviewImage>Resources\img\logo\mnpi_200.png</PreviewImage>
+    <Tags>Multi, NuGet, Package, Installer</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Enterprise" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]" />
+    <Dependency d:Source="Installed" Id="Microsoft.VisualStudio.CodeAnalysis" DisplayName="CodeAnalysis" Version="[14.0,15.0)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>
