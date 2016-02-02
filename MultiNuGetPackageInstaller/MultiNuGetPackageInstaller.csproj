@@ -286,6 +286,7 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VSPackage.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -296,7 +297,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\ExtensionOptions.ico" />
     <Content Include="Resources\img\logo\mnpi_16.ico" />
     <Content Include="Resources\img\logo\mnpi_16.png" />
     <Content Include="Resources\img\logo\mnpi_200.png" />
@@ -306,7 +306,6 @@
     </Content>
     <Content Include="Resources\img\ui\info.png" />
     <Content Include="Resources\img\ui\mnpi_btn_icon.png" />
-    <None Include="Resources\My Category.ico" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
