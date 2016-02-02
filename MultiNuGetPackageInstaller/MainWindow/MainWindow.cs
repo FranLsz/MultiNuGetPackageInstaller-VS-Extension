@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.Settings;
-using Microsoft.VisualStudio.Shell.Settings;
 using MultiNuGetPackageInstaller.Options;
 using NuGet;
 using NuGet.VisualStudio;
@@ -56,85 +55,130 @@ namespace MultiNuGetPackageInstaller.MainWindow
             }
         }
 
-        private void InstallBtn_Click(object sender, EventArgs e)
+
+        void ReportarProgreso(Tuple<int, string, Color> t)
+        {
+            //ProgressBar.Value = t.Item1;
+            //LogBox.AppendLine(GetHour() + t.Item2, t.Item3);
+        }
+
+        // Enviar progreso con el texto en color
+        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto, Color color)
+        {
+            p.Report(new Tuple<int, string, Color>(progreso, texto, color));
+        }
+
+        // Enviar progreso con el texto sin color
+        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto)
+        {
+            p.Report(new Tuple<int, string, Color>(progreso, texto, Color.Black));
+        }
+
+        private async void InstallBtn_Click(object sender, EventArgs e)
         {
             InstallBtn.Enabled = false;
             PackagesBox.Enabled = false;
             ProjectsPanel.Enabled = false;
 
-            DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
-            Solution2 solution = dte.Solution as Solution2;
-
-            Projects projects = solution.Projects;
-
-            var packagesToInstall = new Dictionary<string, string>();
-            var projectsTarget = new List<Project>();
-
+            var projectsTarget = new List<string>();
             foreach (var c in ProjectsPanel.Controls)
             {
                 if (c.GetType() != typeof(CheckBox)) continue;
                 var box = c as CheckBox;
                 if (box.Checked)
-                    projectsTarget.AddRange(from Project p in projects where p.Name == box.Text select p);
+                    projectsTarget.Add(box.Text);
             }
 
+            var opciones = new Dictionary<string, object>
+                {
+                    {"PackagesBox", PackagesBox.Lines },
+                    {"ProjectNameTarget", projectsTarget },
+                };
 
-            foreach (var line in PackagesBox.Lines)
+            var indicadorDeProgreso = new Progress<Tuple<int, string, Color>>(ReportarProgreso);
+            await IniciarProceso(opciones, indicadorDeProgreso);
+        }
+
+        private async Task IniciarProceso(Dictionary<string, object> opciones, IProgress<Tuple<int, string, Color>> p)
+        {
+            await Task.Run(() =>
             {
-                var trimmedLine = line.Replace(" ", "");
+                // Extraccion de opciones
+                var packagesBoxLines = opciones["PackagesBox"] as string[];
+                var projectNameTarget = opciones["ProjectNameTarget"] as List<string>;
 
-                if (trimmedLine.Contains("-"))
+                // Obtencion del DTE
+                DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+                Solution2 solution = dte.Solution as Solution2;
+                Projects projects = solution.Projects;
+
+                var packagesToInstall = new Dictionary<string, string>();
+                var projectsTarget = new List<Project>();
+
+                foreach (var c in projectNameTarget)
                 {
-                    var tuple = trimmedLine.Split('-');
-                    var pkgName = tuple[0];
-                    var pkgVersion = tuple[1];
-                    packagesToInstall.Add(pkgName, pkgVersion);
+                    projectsTarget.AddRange(from Project pk in projects where pk.Name == c select pk);
                 }
-                else
+
+
+                foreach (var line in packagesBoxLines)
                 {
-                    var pkgName = trimmedLine;
-                    packagesToInstall.Add(pkgName, "");
-                }
-            }
+                    var trimmedLine = line.Replace(" ", "");
 
-
-
-
-            var repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
-            var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
-            var pckInstaller = componentModel.GetService<IVsPackageInstaller>();
-
-
-            foreach (var pkg in packagesToInstall)
-            {
-                try
-                {
-                    var p = repo.FindPackagesById(pkg.Key).ToList();
-
-                    if (p.Any())
+                    if (trimmedLine.Contains("-"))
                     {
-                        var pkgName = pkg.Key;
-                        var pkgVersion = pkg.Key;
-
-                        if (pkg.Value.IsEmpty())
-                            pkgVersion = p.Where(o => o.IsLatestVersion).Select(o => o.Version).FirstOrDefault().Version.ToString();
-
-                        foreach (var project in projectsTarget)
-                        {
-                            pckInstaller.InstallPackage(OnlineNuGetApi, project, pkgName, pkgVersion, false);
-                        }
+                        var tuple = trimmedLine.Split('-');
+                        var pkgName = tuple[0];
+                        var pkgVersion = tuple[1];
+                        packagesToInstall.Add(pkgName, pkgVersion);
                     }
                     else
                     {
-                        // PKG not found
+                        var pkgName = trimmedLine;
+                        packagesToInstall.Add(pkgName, "");
                     }
                 }
-                catch (Exception)
-                {
-                    // ignore
-                }
-            }
-        }
 
+                var repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
+                var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
+                var pckInstaller = componentModel.GetService<IVsPackageInstaller>();
+
+
+                foreach (var pkg in packagesToInstall)
+                {
+                    try
+                    {
+                        var pk = repo.FindPackagesById(pkg.Key).ToList();
+
+                        if (pk.Any())
+                        {
+                            var pkgName = pkg.Key;
+                            var pkgVersion = pkg.Key;
+
+                            if (pkg.Value.IsEmpty())
+                                pkgVersion =
+                                    pk.Where(o => o.IsLatestVersion)
+                                        .Select(o => o.Version)
+                                        .FirstOrDefault()
+                                        .Version.ToString();
+
+                            foreach (var project in projectsTarget)
+                            {
+                                pckInstaller.InstallPackage(OnlineNuGetApi, project, pkgName, pkgVersion, false);
+                            }
+                        }
+                        else
+                        {
+                            // PKG not found
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+                }
+                Enviar(p, 100, " ---RPG process ended---");
+            });
+        }
     }
 }
