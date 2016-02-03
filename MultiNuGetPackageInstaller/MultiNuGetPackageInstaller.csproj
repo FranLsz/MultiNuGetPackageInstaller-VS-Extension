@@ -52,6 +52,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Helpers\WinFormsExtensions.cs" />
     <Compile Include="Options\ExtensionOptions.cs" />
     <Compile Include="Options\ExtensionUserControl.cs">
       <SubType>UserControl</SubType>

@@ -118,7 +118,7 @@ namespace MultiNuGetPackageInstaller.Options
                 btn.Parent = ButtonsPanel;
                 btn.Click += LoadPackages;
                 btn.AutoSize = true;
-                btn.Location = new Point(20, i * 25);
+                btn.Location = new Point(20, i * 30);
             }
         }
 

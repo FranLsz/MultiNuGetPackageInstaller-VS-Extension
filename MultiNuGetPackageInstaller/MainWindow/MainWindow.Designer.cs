@@ -37,8 +37,9 @@
             this.infoBtn = new System.Windows.Forms.PictureBox();
             this.ProjectsPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.Templates = new System.Windows.Forms.Panel();
-            this.SolutionNotFoundLbl = new System.Windows.Forms.Label();
+            this.TemplatesPanel = new System.Windows.Forms.Panel();
+            this.ErrorLbl = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.infoBtn)).BeginInit();
             this.ProjectsPanel.SuspendLayout();
@@ -130,31 +131,39 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Solution projects";
             // 
-            // Templates
+            // TemplatesPanel
             // 
-            this.Templates.Location = new System.Drawing.Point(12, 233);
-            this.Templates.Name = "Templates";
-            this.Templates.Size = new System.Drawing.Size(182, 173);
-            this.Templates.TabIndex = 8;
+            this.TemplatesPanel.Location = new System.Drawing.Point(12, 233);
+            this.TemplatesPanel.Name = "TemplatesPanel";
+            this.TemplatesPanel.Size = new System.Drawing.Size(182, 173);
+            this.TemplatesPanel.TabIndex = 8;
             // 
-            // SolutionNotFoundLbl
+            // ErrorLbl
             // 
-            this.SolutionNotFoundLbl.AutoSize = true;
-            this.SolutionNotFoundLbl.ForeColor = System.Drawing.Color.Red;
-            this.SolutionNotFoundLbl.Location = new System.Drawing.Point(361, 426);
-            this.SolutionNotFoundLbl.Name = "SolutionNotFoundLbl";
-            this.SolutionNotFoundLbl.Size = new System.Drawing.Size(107, 13);
-            this.SolutionNotFoundLbl.TabIndex = 9;
-            this.SolutionNotFoundLbl.Text = "Solution not found";
-            this.SolutionNotFoundLbl.Visible = false;
+            this.ErrorLbl.ForeColor = System.Drawing.Color.Red;
+            this.ErrorLbl.Location = new System.Drawing.Point(12, 426);
+            this.ErrorLbl.Name = "ErrorLbl";
+            this.ErrorLbl.Size = new System.Drawing.Size(810, 13);
+            this.ErrorLbl.TabIndex = 9;
+            this.ErrorLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(61, 217);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "My templates";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(834, 511);
-            this.Controls.Add(this.SolutionNotFoundLbl);
-            this.Controls.Add(this.Templates);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.ErrorLbl);
+            this.Controls.Add(this.TemplatesPanel);
             this.Controls.Add(this.ProjectsPanel);
             this.Controls.Add(this.infoBtn);
             this.Controls.Add(this.PackagesBox);
@@ -186,8 +195,9 @@
         private System.Windows.Forms.RichTextBox PackagesBox;
         private System.Windows.Forms.PictureBox infoBtn;
         private System.Windows.Forms.Panel ProjectsPanel;
-        private System.Windows.Forms.Panel Templates;
+        private System.Windows.Forms.Panel TemplatesPanel;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label SolutionNotFoundLbl;
+        private System.Windows.Forms.Label ErrorLbl;
+        private System.Windows.Forms.Label label3;
     }
 }
