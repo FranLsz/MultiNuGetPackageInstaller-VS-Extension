@@ -40,9 +40,10 @@
             this.TemplatesPanel = new System.Windows.Forms.Panel();
             this.ErrorLbl = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.ClearBtn = new System.Windows.Forms.Button();
+            this.ExitBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.infoBtn)).BeginInit();
-            this.ProjectsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -95,12 +96,12 @@
             this.PackagesBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.PackagesBox.EnableAutoDragDrop = true;
             this.PackagesBox.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.PackagesBox.Location = new System.Drawing.Point(200, 233);
+            this.PackagesBox.Location = new System.Drawing.Point(200, 240);
             this.PackagesBox.Name = "PackagesBox";
             this.PackagesBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.PackagesBox.Size = new System.Drawing.Size(435, 173);
             this.PackagesBox.TabIndex = 5;
-            this.PackagesBox.Text = "EntityFramework - 3.4.5\nUnity.WebApi - 6.1.3\nBootstrap\njQuery";
+            this.PackagesBox.Text = "";
             // 
             // infoBtn
             // 
@@ -112,12 +113,12 @@
             this.infoBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.infoBtn.TabIndex = 6;
             this.infoBtn.TabStop = false;
+            this.infoBtn.Click += new System.EventHandler(this.infoBtn_Click);
             // 
             // ProjectsPanel
             // 
             this.ProjectsPanel.AutoScroll = true;
-            this.ProjectsPanel.Controls.Add(this.label2);
-            this.ProjectsPanel.Location = new System.Drawing.Point(641, 233);
+            this.ProjectsPanel.Location = new System.Drawing.Point(641, 240);
             this.ProjectsPanel.Name = "ProjectsPanel";
             this.ProjectsPanel.Size = new System.Drawing.Size(181, 173);
             this.ProjectsPanel.TabIndex = 7;
@@ -125,7 +126,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 3);
+            this.label2.Location = new System.Drawing.Point(638, 215);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 0;
@@ -133,7 +134,8 @@
             // 
             // TemplatesPanel
             // 
-            this.TemplatesPanel.Location = new System.Drawing.Point(12, 233);
+            this.TemplatesPanel.AutoScroll = true;
+            this.TemplatesPanel.Location = new System.Drawing.Point(12, 240);
             this.TemplatesPanel.Name = "TemplatesPanel";
             this.TemplatesPanel.Size = new System.Drawing.Size(182, 173);
             this.TemplatesPanel.TabIndex = 8;
@@ -150,17 +152,51 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(61, 217);
+            this.label3.Location = new System.Drawing.Point(12, 215);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "My templates";
+            // 
+            // ClearBtn
+            // 
+            this.ClearBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.ClearBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ClearBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ClearBtn.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ClearBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ClearBtn.Location = new System.Drawing.Point(200, 414);
+            this.ClearBtn.Name = "ClearBtn";
+            this.ClearBtn.Size = new System.Drawing.Size(60, 32);
+            this.ClearBtn.TabIndex = 11;
+            this.ClearBtn.Text = "Clear";
+            this.ClearBtn.UseVisualStyleBackColor = false;
+            this.ClearBtn.Visible = false;
+            this.ClearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
+            // 
+            // ExitBtn
+            // 
+            this.ExitBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.ExitBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ExitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ExitBtn.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ExitBtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ExitBtn.Location = new System.Drawing.Point(762, 467);
+            this.ExitBtn.Name = "ExitBtn";
+            this.ExitBtn.Size = new System.Drawing.Size(60, 32);
+            this.ExitBtn.TabIndex = 12;
+            this.ExitBtn.Text = "Exit";
+            this.ExitBtn.UseVisualStyleBackColor = false;
+            this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(834, 511);
+            this.Controls.Add(this.ExitBtn);
+            this.Controls.Add(this.ClearBtn);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ErrorLbl);
             this.Controls.Add(this.TemplatesPanel);
@@ -172,6 +208,7 @@
             this.Controls.Add(this.Title);
             this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -179,8 +216,6 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.infoBtn)).EndInit();
-            this.ProjectsPanel.ResumeLayout(false);
-            this.ProjectsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,5 +234,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label ErrorLbl;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button ClearBtn;
+        private System.Windows.Forms.Button ExitBtn;
     }
 }

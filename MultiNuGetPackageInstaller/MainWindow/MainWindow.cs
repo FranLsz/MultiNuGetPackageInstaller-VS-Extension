@@ -39,13 +39,18 @@ namespace MultiNuGetPackageInstaller.MainWindow
             var i2 = 0;
             foreach (Template tt in ExtensionOptions.Templates)
             {
-                i2++;
+
                 Button box = new Button();
                 box.Text = tt.Name;
                 box.Parent = TemplatesPanel;
                 box.AutoSize = true;
                 box.Location = new Point(20, i2 * 25); //vertical
+                box.Width = 125;
+                box.FlatStyle = FlatStyle.Flat;
+                box.ForeColor = Color.White;
+                box.BackColor = Color.FromArgb(47, 47, 47); ;
                 box.Click += CargarPaquetes;
+                i2++;
             }
 
             // Se comprueba si hay una solucion cargada
@@ -62,12 +67,12 @@ namespace MultiNuGetPackageInstaller.MainWindow
             var i = 0;
             foreach (Project p in projects)
             {
-                i++;
                 CheckBox btn = new CheckBox();
                 btn.Text = p.Name;
                 btn.Parent = ProjectsPanel;
                 btn.AutoSize = true;
                 btn.Location = new Point(20, i * 20); //vertical
+                i++;
             }
         }
 
@@ -161,6 +166,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             ProjectsPanel.Enabled = true;
             TemplatesPanel.Enabled = true;
             InstallBtn.Enabled = true;
+            ClearBtn.Visible = true;
         }
 
         private async Task IniciarProceso(IReadOnlyDictionary<string, object> opciones, IProgress<Tuple<int, string, Color>> p)
@@ -190,18 +196,26 @@ namespace MultiNuGetPackageInstaller.MainWindow
                 foreach (var line in packagesBoxLines)
                 {
                     var trimmedLine = line.Trim();
+                    var pkgName = trimmedLine;
+                    var pkgVersion = string.Empty;
+
                     if (trimmedLine.Contains(" "))
                     {
                         var tuple = trimmedLine.Split(' ');
-                        var pkgName = tuple[0];
-                        var pkgVersion = tuple[1];
+                        pkgName = tuple[0];
+                        pkgVersion = tuple[1];
                         packagesToInstall.Add(pkgName, pkgVersion);
                     }
-                    else
+
+                    // si el packete esta duplicado en el textbox, lanza error
+                    if (packagesToInstall.Any(o => o.Key == pkgName))
                     {
-                        var pkgName = trimmedLine;
-                        packagesToInstall.Add(pkgName, string.Empty);
+                        Enviar(p, 100, "Package " + pkgName + " is duplicated", Color.Red);
+                        return;
                     }
+
+                    // se agrega a la lista de paquetes para instalar
+                    packagesToInstall.Add(pkgName, pkgVersion);
                 }
 
                 Enviar(p, 0, " Connecting to NuGet API...");
@@ -230,13 +244,16 @@ namespace MultiNuGetPackageInstaller.MainWindow
                                         .Select(o => o.Version)
                                         .FirstOrDefault()
                                         .Version.ToString();
-
-                            // se verifica que existe un paquete con esa version
-                            if (pk.All(o => o.Version.ToString() != pkgVersion))
+                            else
                             {
-                                Enviar(p, 25, "Couldn't obtain the version " + pkgVersion + " of " + pkgName, Color.Red);
-                                break;
+                                // se verifica que existe un paquete con esa version
+                                if (pk.All(o => o.Version.ToString() != pkgVersion))
+                                {
+                                    Enviar(p, 25, "Couldn't obtain the version " + pkgVersion + " of " + pkgName, Color.Red);
+                                    break;
+                                }
                             }
+
 
                             foreach (var project in projectsTarget)
                             {
@@ -262,6 +279,23 @@ namespace MultiNuGetPackageInstaller.MainWindow
         private string GetHora()
         {
             return DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        private void ClearBtn_Click(object sender, EventArgs e)
+        {
+            PackagesBox.Lines = new[] { string.Empty };
+            PackagesBox.ReadOnly = false;
+            ClearBtn.Visible = false;
+        }
+
+        private void ExitBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void infoBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
