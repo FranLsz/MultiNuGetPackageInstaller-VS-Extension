@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\WinFormsExtensions.cs" />
-    <Compile Include="SettingsWindow\ExtensionOptions.cs" />
     <Compile Include="SettingsWindow\SettingsWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -4,9 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
+using MultiNuGetPackageInstaller.Model;
+using Newtonsoft.Json;
 
 namespace MultiNuGetPackageInstaller.MainCommand
 {
@@ -31,6 +35,10 @@ namespace MultiNuGetPackageInstaller.MainCommand
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(MainCommandPackage.PackageGuidString)]
+    [ProvideOptionPage(typeof(OptionPage),
+    "Multi NuGet package installer", "Settings", 0, 0, true)]
+    [ProvideProfile(typeof(OptionPage),
+    "Multi NuGet package installer", "Settings", 0, 0, true)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class MainCommandPackage : Package
     {
@@ -63,5 +71,37 @@ namespace MultiNuGetPackageInstaller.MainCommand
         }
 
         #endregion
+
+        public List<Template> Templates
+        {
+            get
+            {
+                OptionPage page = (OptionPage)GetDialogPage(typeof(OptionPage));
+                return JsonConvert.DeserializeObject<List<Template>>(page.TemplatesJson); ;
+            }
+
+            set
+            {
+                OptionPage page = (OptionPage)GetDialogPage(typeof(OptionPage));
+                page.TemplatesJson = JsonConvert.SerializeObject(value);
+            }
+        }
+    }
+
+    [Guid("E3111480-9EA2-4739-A089-5C3C4283FEC3")]
+    public class OptionPage : DialogPage
+    {
+        private string _templatesJson = string.Empty;
+        public string TemplatesJson { get { return _templatesJson; } set { _templatesJson = value; } }
+
+        protected override IWin32Window Window
+        {
+            get
+            {
+                SettingsWindow.SettingsWindow page = new SettingsWindow.SettingsWindow { OptionsPage = this };
+                page.Initialize();
+                return page;
+            }
+        }
     }
 }

@@ -76,7 +76,7 @@
 
   <Symbols>
     <!-- This is the package guid. -->
-    <GuidSymbol name="guidMainCommandPackage" value="{b5dc16c4-c991-4a9d-a941-6b73c2a35a15}" />
+    <GuidSymbol name="guidMainCommandPackage" value="{25ffb3a1-3f31-4587-8a4b-9b7c4f02806d}" />
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidMainCommandPackageCmdSet" value="{de0fba50-54ca-47a2-8749-fbadaf25643c}">

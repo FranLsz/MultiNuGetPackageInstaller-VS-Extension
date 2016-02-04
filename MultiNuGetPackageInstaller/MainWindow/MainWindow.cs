@@ -9,6 +9,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
 using MultiNuGetPackageInstaller.Helpers;
+using MultiNuGetPackageInstaller.MainCommand;
 using MultiNuGetPackageInstaller.Model;
 using MultiNuGetPackageInstaller.SettingsWindow;
 using NuGet;
@@ -21,9 +22,9 @@ namespace MultiNuGetPackageInstaller.MainWindow
         private static string OnlineNuGetApi => "https://packages.nuget.org/api/v2";
 
         private IServiceProvider ServiceProvider { get; }
-        private ExtensionOptions ExtensionOptions { get; }
+        private MainCommandPackage ExtensionOptions { get; }
 
-        public MainWindow(IServiceProvider service, ExtensionOptions extensionOptions)
+        public MainWindow(IServiceProvider service, MainCommandPackage extensionOptions)
         {
             ServiceProvider = service;
             ExtensionOptions = extensionOptions;

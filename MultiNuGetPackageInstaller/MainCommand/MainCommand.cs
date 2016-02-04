@@ -95,8 +95,8 @@ namespace MultiNuGetPackageInstaller.MainCommand
         /// 
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            ExtensionOptions extensionOptions = package as ExtensionOptions;
-            
+            MainCommandPackage extensionOptions = package as MainCommandPackage;
+
             new MainWindow.MainWindow(ServiceProvider, extensionOptions).ShowDialog();
         }
     }
