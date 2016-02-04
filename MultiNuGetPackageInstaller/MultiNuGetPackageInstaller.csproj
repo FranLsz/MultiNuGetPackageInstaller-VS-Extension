@@ -300,7 +300,10 @@
     </Content>
     <Content Include="Resources\img\logo\mnpi_16.ico" />
     <Content Include="Resources\img\logo\mnpi_16.png" />
-    <Content Include="Resources\img\logo\mnpi_200.png" />
+    <Content Include="Resources\img\logo\mnpi_200.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\img\logo\mnpi_50.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

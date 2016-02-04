@@ -4,7 +4,7 @@
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="MultiNuGetPackageInstaller.Francisco López Sánchez.4af2a5e2-873b-4b9f-bfaa-9db23850dabc"
-              Version="0.0.2" Language="en-US" Publisher="Francisco López Sánchez" />
+              Version="1.0.0" Language="en-US" Publisher="Francisco López Sánchez" />
     <DisplayName>Multi NuGet Package Installer</DisplayName>
     <Description xml:space="preserve">Install multiple NuGet packages on your current solution.</Description>
     <License>License.txt</License>
