@@ -59,5 +59,59 @@ namespace MultiNuGetPackageInstaller {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MultiNuGetPackageInstaller.
+        /// </summary>
+        internal static string _101 {
+            get {
+                return ResourceManager.GetString("101", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string _102 {
+            get {
+                return ResourceManager.GetString("102", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export all the packages template.
+        /// </summary>
+        internal static string _103 {
+            get {
+                return ResourceManager.GetString("103", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates.
+        /// </summary>
+        internal static string _104 {
+            get {
+                return ResourceManager.GetString("104", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi NuGet Package Installer -  Templates.
+        /// </summary>
+        internal static string _105 {
+            get {
+                return ResourceManager.GetString("105", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi NuGet Package Installer.
+        /// </summary>
+        internal static string _106 {
+            get {
+                return ResourceManager.GetString("106", resourceCulture);
+            }
+        }
     }
 }

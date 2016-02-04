@@ -36,10 +36,10 @@ namespace MultiNuGetPackageInstaller.MainCommand
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuidString)]
-    [ProvideOptionPage(typeof (OptionPage),
-        "Multi NuGet package installer", "Settings", 0, 0, true)]
-    [ProvideProfile(typeof (OptionPage),
-        "MultiNuGetPackageInstaller", "Settings", 0, 0, true)]
+    [ProvideOptionPage(typeof(OptionPage),
+        "Multi NuGet package installer", "Templates", 106, 104, true)]
+    [ProvideProfile(typeof(OptionPage),
+        "MultiNuGetPackageInstaller", "Settings", 101, 105, true, DescriptionResourceID = 103)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
         Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class MainCommandPackage : Package
@@ -53,15 +53,15 @@ namespace MultiNuGetPackageInstaller.MainCommand
         {
             get
             {
-                var page = (OptionPage) GetDialogPage(typeof (OptionPage));
-                return JsonConvert.DeserializeObject<List<Template>>(page.TemplatesJson);
+                var pagina = (OptionPage)GetDialogPage(typeof(OptionPage));
+                return JsonConvert.DeserializeObject<List<Template>>(pagina.TemplatesJson);
                 ;
             }
 
             set
             {
-                var page = (OptionPage) GetDialogPage(typeof (OptionPage));
-                page.TemplatesJson = JsonConvert.SerializeObject(value);
+                var pagina = (OptionPage)GetDialogPage(typeof(OptionPage));
+                pagina.TemplatesJson = JsonConvert.SerializeObject(value);
             }
         }
 
@@ -89,7 +89,7 @@ namespace MultiNuGetPackageInstaller.MainCommand
         {
             get
             {
-                var page = new SettingsWindow.SettingsWindow {OptionsPage = this};
+                var page = new SettingsWindow.SettingsWindow { OptionsPage = this };
                 page.Initialize();
                 return page;
             }
