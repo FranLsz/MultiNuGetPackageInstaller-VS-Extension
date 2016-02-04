@@ -9,7 +9,7 @@ using System.ComponentModel.Design;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using MultiNuGetPackageInstaller.Options;
+using MultiNuGetPackageInstaller.SettingsWindow;
 
 namespace MultiNuGetPackageInstaller.MainCommand
 {

@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.Settings;
-using Microsoft.VisualStudio.Settings.Internal;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Settings;
 using MultiNuGetPackageInstaller.Model;
 using Newtonsoft.Json;
 using NuGet;
 
-namespace MultiNuGetPackageInstaller.Options
+namespace MultiNuGetPackageInstaller.SettingsWindow
 {
-    public partial class ExtensionUserControl : UserControl
+    public partial class SettingsWindow : UserControl
     {
-        public ExtensionUserControl()
+        public SettingsWindow()
         {
             InitializeComponent();
         }

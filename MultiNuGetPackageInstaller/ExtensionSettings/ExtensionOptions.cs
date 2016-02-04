@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Shell;
 using MultiNuGetPackageInstaller.Model;
 using Newtonsoft.Json;
 
-namespace MultiNuGetPackageInstaller.Options
+namespace MultiNuGetPackageInstaller.ExtensionSettings
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -124,7 +124,7 @@ namespace MultiNuGetPackageInstaller.Options
         {
             get
             {
-                ExtensionUserControl page = new ExtensionUserControl { OptionsPage = this };
+                SettingsWindow page = new SettingsWindow { OptionsPage = this };
                 page.Initialize();
                 return page;
             }

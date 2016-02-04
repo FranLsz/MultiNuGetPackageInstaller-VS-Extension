@@ -10,7 +10,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
 using MultiNuGetPackageInstaller.Helpers;
 using MultiNuGetPackageInstaller.Model;
-using MultiNuGetPackageInstaller.Options;
+using MultiNuGetPackageInstaller.SettingsWindow;
 using NuGet;
 using NuGet.VisualStudio;
 
@@ -35,22 +35,26 @@ namespace MultiNuGetPackageInstaller.MainWindow
             DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
             Solution2 solution = dte.Solution as Solution2;
 
-            // Se cargan los templates guardados
-            var i2 = 0;
-            foreach (Template tt in ExtensionOptions.Templates)
+            // Se cargan los templates guardados en caso de que existan
+            if (ExtensionOptions.Templates != null)
             {
+                var i2 = 0;
+                foreach (Template tt in ExtensionOptions.Templates)
+                {
 
-                Button box = new Button();
-                box.Text = tt.Name;
-                box.Parent = TemplatesPanel;
-                box.AutoSize = true;
-                box.Location = new Point(20, i2 * 25); //vertical
-                box.Width = 125;
-                box.FlatStyle = FlatStyle.Flat;
-                box.ForeColor = Color.White;
-                box.BackColor = Color.FromArgb(47, 47, 47); ;
-                box.Click += CargarPaquetes;
-                i2++;
+                    Button box = new Button();
+                    box.Text = tt.Name;
+                    box.Parent = TemplatesPanel;
+                    box.AutoSize = true;
+                    box.Location = new Point(20, i2 * 25); //vertical
+                    box.Width = 125;
+                    box.FlatStyle = FlatStyle.Flat;
+                    box.ForeColor = Color.White;
+                    box.BackColor = Color.FromArgb(47, 47, 47);
+                    ;
+                    box.Click += CargarPaquetes;
+                    i2++;
+                }
             }
 
             // Se comprueba si hay una solucion cargada

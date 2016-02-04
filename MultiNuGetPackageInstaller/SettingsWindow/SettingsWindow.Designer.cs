@@ -1,6 +1,6 @@
-﻿namespace MultiNuGetPackageInstaller.Options
+﻿namespace MultiNuGetPackageInstaller.SettingsWindow
 {
-    partial class ExtensionUserControl
+    partial class SettingsWindow
     {
         /// <summary> 
         /// Required designer variable.
