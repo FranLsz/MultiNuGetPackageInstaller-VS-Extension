@@ -38,7 +38,7 @@ namespace MultiNuGetPackageInstaller.MainCommand
     [ProvideOptionPage(typeof(OptionPage),
     "Multi NuGet package installer", "Settings", 0, 0, true)]
     [ProvideProfile(typeof(OptionPage),
-    "Multi NuGet package installer", "Settings", 0, 0, true)]
+    "MultiNuGetPackageInstaller", "Settings", 0, 0, true)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class MainCommandPackage : Package
     {

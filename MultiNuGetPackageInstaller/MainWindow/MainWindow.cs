@@ -19,32 +19,33 @@ namespace MultiNuGetPackageInstaller.MainWindow
 {
     public partial class MainWindow : Form
     {
-        private static string OnlineNuGetApi => "https://packages.nuget.org/api/v2";
 
         private IServiceProvider ServiceProvider { get; }
-        private MainCommandPackage ExtensionOptions { get; }
+        private MainCommandPackage MainCommandPackage { get; }
 
-        public MainWindow(IServiceProvider service, MainCommandPackage extensionOptions)
+        private static string OnlineNuGetApi => "https://packages.nuget.org/api/v2";
+
+        public MainWindow(IServiceProvider serviceProvider, MainCommandPackage mainCommandPackage)
         {
-            ServiceProvider = service;
-            ExtensionOptions = extensionOptions;
+            ServiceProvider = serviceProvider;
+            MainCommandPackage = mainCommandPackage;
             InitializeComponent();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
-            Solution2 solution = dte.Solution as Solution2;
+            Solution2 solucion = dte.Solution as Solution2;
 
             // Se cargan los templates guardados en caso de que existan
-            if (ExtensionOptions.Templates != null)
+            if (MainCommandPackage.Templates != null)
             {
                 var i2 = 0;
-                foreach (Template tt in ExtensionOptions.Templates)
+                foreach (Template tt in MainCommandPackage.Templates)
                 {
 
                     Button box = new Button();
-                    box.Text = tt.Name;
+                    box.Text = tt.Nombre;
                     box.Parent = TemplatesPanel;
                     box.AutoSize = true;
                     box.Location = new Point(20, i2 * 25); //vertical
@@ -59,7 +60,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             }
 
             // Se comprueba si hay una solucion cargada
-            if (solution == null || !solution.IsOpen)
+            if (solucion == null || !solucion.IsOpen)
             {
                 ErrorLbl.Text = "Solution not found";
                 ProjectsPanel.Visible = false;
@@ -68,7 +69,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             }
 
             // Se cargan los proyectos de la solucion actual
-            Projects projects = solution.Projects;
+            Projects projects = solucion.Projects;
             var i = 0;
             foreach (Project p in projects)
             {
@@ -83,14 +84,14 @@ namespace MultiNuGetPackageInstaller.MainWindow
 
         private void CargarPaquetes(object sender, EventArgs e)
         {
-            PackagesBox.Lines = ExtensionOptions.Templates.First(o => o.Name == ((Button)sender).Text).Packages;
+            PackagesBox.Lines = MainCommandPackage.Templates.First(o => o.Nombre == ((Button)sender).Text).Paquetes;
         }
 
 
         void ReportarProgreso(Tuple<int, string, Color> t)
         {
             //ProgressBar.Value = t.Item1;
-            PackagesBox.AppendLine(GetHora() + t.Item2, t.Item3);
+            PackagesBox.AgregarLinea(GetHora() + t.Item2, t.Item3);
         }
 
         // Enviar progreso con el texto en color
@@ -127,18 +128,17 @@ namespace MultiNuGetPackageInstaller.MainWindow
 
             }
 
-
             // Si no se ha seleccionado un projecto como minimo, lanza mensaje de error
-            var projectsTarget = new List<string>();
+            var proyectosSeleccionados = new List<string>();
             foreach (var c in ProjectsPanel.Controls)
             {
                 if (c.GetType() != typeof(CheckBox)) continue;
                 var box = c as CheckBox;
                 if (box.Checked)
-                    projectsTarget.Add(box.Text);
+                    proyectosSeleccionados.Add(box.Text);
             }
 
-            if (projectsTarget.IsEmpty())
+            if (proyectosSeleccionados.IsEmpty())
             {
                 ErrorLbl.Text = "You must selected at least one project";
                 return;
@@ -156,7 +156,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             var opciones = new Dictionary<string, object>
                 {
                     {"PackagesBox", PackagesBox.Lines },
-                    {"ProjectNameTarget", projectsTarget },
+                    {"ProjectNameTarget", proyectosSeleccionados },
                 };
 
             // Se vacia el contenido del TextBox
@@ -181,55 +181,55 @@ namespace MultiNuGetPackageInstaller.MainWindow
                 Enviar(p, 0, " ------");
 
                 // Extraccion de opciones
-                var packagesBoxLines = opciones["PackagesBox"] as string[];
-                var projectNameTarget = opciones["ProjectNameTarget"] as List<string>;
+                var listaDePaquetes = opciones["PackagesBox"] as string[];
+                var proyectosSeleccionados = opciones["ProjectNameTarget"] as List<string>;
 
                 // Obtencion del DTE
                 DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
-                Solution2 solution = dte.Solution as Solution2;
-                Projects projects = solution.Projects;
+                Solution2 solucion = dte.Solution as Solution2;
+                Projects proyectos = solucion.Projects;
 
-                var packagesToInstall = new Dictionary<string, string>();
-                var projectsTarget = new List<Project>();
+                var paquetesParaInstalar = new Dictionary<string, string>();
+                var proyectosDondeInstalar = new List<Project>();
 
-                foreach (var c in projectNameTarget)
+                foreach (var c in proyectosSeleccionados)
                 {
-                    projectsTarget.AddRange(from Project pk in projects where pk.Name == c select pk);
+                    proyectosDondeInstalar.AddRange(from Project pk in proyectos where pk.Name == c select pk);
                 }
 
 
-                foreach (var line in packagesBoxLines)
+                foreach (var linea in listaDePaquetes)
                 {
-                    var trimmedLine = line.Trim();
-                    var pkgName = trimmedLine;
+                    var trimmedLine = linea.Trim();
+                    var pkgNombre = trimmedLine;
                     var pkgVersion = string.Empty;
 
                     if (trimmedLine.Contains(" "))
                     {
-                        var tuple = trimmedLine.Split(' ');
-                        pkgName = tuple[0];
-                        pkgVersion = tuple[1];
-                        packagesToInstall.Add(pkgName, pkgVersion);
+                        var tupla = trimmedLine.Split(' ');
+                        pkgNombre = tupla[0];
+                        pkgVersion = tupla[1];
+                        paquetesParaInstalar.Add(pkgNombre, pkgVersion);
                     }
 
                     // si el packete esta duplicado en el textbox, lanza error
-                    if (packagesToInstall.Any(o => o.Key == pkgName))
+                    if (paquetesParaInstalar.Any(o => o.Key == pkgNombre))
                     {
-                        Enviar(p, 100, "Package " + pkgName + " is duplicated", Color.Red);
+                        Enviar(p, 100, "Package " + pkgNombre + " is duplicated", Color.Red);
                         return;
                     }
 
                     // se agrega a la lista de paquetes para instalar
-                    packagesToInstall.Add(pkgName, pkgVersion);
+                    paquetesParaInstalar.Add(pkgNombre, pkgVersion);
                 }
 
                 Enviar(p, 0, " Connecting to NuGet API...");
                 var repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
                 var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
-                var pckInstaller = componentModel.GetService<IVsPackageInstaller>();
+                var pkgInstalador = componentModel.GetService<IVsPackageInstaller>();
                 Enviar(p, 25, " Connected successfully", Color.Green);
 
-                foreach (var pkg in packagesToInstall)
+                foreach (var pkg in paquetesParaInstalar)
                 {
                     Enviar(p, 25, " Installing " + pkg.Key + " " + pkg.Value);
                     try
@@ -238,7 +238,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
 
                         if (pk.Any())
                         {
-                            var pkgName = pkg.Key;
+                            var pkgNombre = pkg.Key;
                             var pkgVersion = pkg.Value;
 
                             // Si no se ha especificado la version del paquete,
@@ -254,16 +254,16 @@ namespace MultiNuGetPackageInstaller.MainWindow
                                 // se verifica que existe un paquete con esa version
                                 if (pk.All(o => o.Version.ToString() != pkgVersion))
                                 {
-                                    Enviar(p, 25, "Couldn't obtain the version " + pkgVersion + " of " + pkgName, Color.Red);
+                                    Enviar(p, 25, "Couldn't obtain the version " + pkgVersion + " of " + pkgNombre, Color.Red);
                                     break;
                                 }
                             }
 
 
-                            foreach (var project in projectsTarget)
+                            foreach (var proyecto in proyectosDondeInstalar)
                             {
-                                pckInstaller.InstallPackage(OnlineNuGetApi, project, pkgName, pkgVersion, false);
-                                Enviar(p, 25, " Package " + pkg.Key + " installed on " + project.Name, Color.Green);
+                                pkgInstalador.InstallPackage(OnlineNuGetApi, proyecto, pkgNombre, pkgVersion, false);
+                                Enviar(p, 25, " Package " + pkgNombre + " installed on " + proyecto.Name, Color.Green);
                             }
                         }
                         else

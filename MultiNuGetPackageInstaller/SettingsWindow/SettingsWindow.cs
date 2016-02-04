@@ -46,9 +46,9 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             SaveBtn.Enabled = true;
             DeleteBtn.Enabled = true;
 
-            _selectedTemplate = _templates.First(o => o.Name == ((Button)sender).Text);
-            TemplateNameTxt.Text = _selectedTemplate.Name;
-            PackageBoxTxt.Lines = _selectedTemplate.Packages;
+            _selectedTemplate = _templates.First(o => o.Nombre == ((Button)sender).Text);
+            TemplateNameTxt.Text = _selectedTemplate.Nombre;
+            PackageBoxTxt.Lines = _selectedTemplate.Paquetes;
         }
 
         // Nueva template
@@ -64,7 +64,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
         // Guardar template actual
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            var template = new Template() { Name = TemplateNameTxt.Text, Packages = PackageBoxTxt.Lines };
+            var template = new Template() { Nombre = TemplateNameTxt.Text, Paquetes = PackageBoxTxt.Lines };
 
             // Editando
             if (_selectedTemplate != null)
@@ -109,7 +109,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
                 i++;
 
                 var btn = new Button();
-                btn.Text = tt.Name;
+                btn.Text = tt.Nombre;
                 btn.Parent = ButtonsPanel;
                 btn.Click += LoadPackages;
                 btn.AutoSize = true;
@@ -121,14 +121,14 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
         private bool ValidateTemplate(Template template, bool editing = false)
         {
             // Si no estan vacios los campos
-            if (template.Name.IsEmpty() || !template.Packages.Any())
+            if (template.Nombre.IsEmpty() || !template.Paquetes.Any())
             {
                 ErrorLbl.Text = "Both fields are required";
                 return false;
             }
 
             // Si el nombre el template no es muy largo
-            if (template.Name.Length > 20)
+            if (template.Nombre.Length > 20)
             {
                 ErrorLbl.Text = "The name is too long";
                 return false;
@@ -139,7 +139,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             {
                 // Comprueba que no se intenta añadir un template 
                 // con el mismo nombre que otro existente
-                if (_templates.Any(o => o.Name == template.Name))
+                if (_templates.Any(o => o.Nombre == template.Nombre))
                 {
                     ErrorLbl.Text = "A template with that name is already entered";
                     return false;

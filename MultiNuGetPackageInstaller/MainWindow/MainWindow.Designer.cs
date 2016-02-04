@@ -113,6 +113,7 @@
             this.infoBtn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.infoBtn.TabIndex = 6;
             this.infoBtn.TabStop = false;
+            this.infoBtn.Visible = false;
             this.infoBtn.Click += new System.EventHandler(this.infoBtn_Click);
             // 
             // ProjectsPanel

@@ -1,11 +1,9 @@
 ﻿
-using System.Collections.Generic;
-
 namespace MultiNuGetPackageInstaller.Model
 {
     public class Template
     {
-        public string Name { get; set; }
-        public string[] Packages { get; set; }
+        public string Nombre { get; set; }
+        public string[] Paquetes { get; set; }
     }
 }
