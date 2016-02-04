@@ -12,19 +12,18 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
 {
     public partial class SettingsWindow : UserControl
     {
+        private List<Template> _templates;
+        private Template _templateSeleccionado;
+
+        internal OptionPage OptionsPage;
+
         public SettingsWindow()
         {
             InitializeComponent();
         }
 
-        internal OptionPage OptionsPage;
-
-        private List<Template> _templates;
-        private Template _templateSeleccionado;
-
         public void Initialize()
         {
-
             if (!OptionsPage.TemplatesJson.IsEmpty())
             {
                 _templates = JsonConvert.DeserializeObject<List<Template>>(OptionsPage.TemplatesJson);
@@ -32,12 +31,10 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             }
             else
                 _templates = new List<Template>();
-
         }
 
         private void ExtensionUserControl_Load(object sender, EventArgs e)
         {
-
         }
 
         // Cargar los paquetes del template actual
@@ -46,7 +43,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             SaveBtn.Enabled = true;
             DeleteBtn.Enabled = true;
 
-            _templateSeleccionado = _templates.First(o => o.Nombre == ((Button)sender).Text);
+            _templateSeleccionado = _templates.First(o => o.Nombre == ((Button) sender).Text);
             TemplateNameTxt.Text = _templateSeleccionado.Nombre;
             PackageBoxTxt.Lines = _templateSeleccionado.Paquetes;
         }
@@ -58,13 +55,13 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             DeleteBtn.Enabled = false;
 
             TemplateNameTxt.Text = string.Empty;
-            PackageBoxTxt.Lines = new[] { string.Empty };
+            PackageBoxTxt.Lines = new[] {string.Empty};
         }
 
         // Guardar template actual
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            var template = new Template() { Nombre = TemplateNameTxt.Text, Paquetes = PackageBoxTxt.Lines };
+            var template = new Template {Nombre = TemplateNameTxt.Text, Paquetes = PackageBoxTxt.Lines};
 
             // Editando
             if (_templateSeleccionado != null)
@@ -113,7 +110,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
                 btn.Parent = ButtonsPanel;
                 btn.Click += Cargarpaquetes;
                 btn.AutoSize = true;
-                btn.Location = new Point(20, i * 30);
+                btn.Location = new Point(20, i*30);
             }
         }
 

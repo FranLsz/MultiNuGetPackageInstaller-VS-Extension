@@ -12,9 +12,9 @@ namespace MultiNuGetPackageInstaller.Helpers
         {
             get
             {
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string path = Uri.UnescapeDataString(uri.Path);
+                var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                var uri = new UriBuilder(codeBase);
+                var path = Uri.UnescapeDataString(uri.Path);
                 return Path.GetDirectoryName(path);
             }
         }
@@ -31,12 +31,12 @@ namespace MultiNuGetPackageInstaller.Helpers
 
         public static string ReplaceLastOccurrence(string Source, string Find, string Replace)
         {
-            int place = Source.LastIndexOf(Find, StringComparison.Ordinal);
+            var place = Source.LastIndexOf(Find, StringComparison.Ordinal);
 
             if (place == -1)
                 return Source;
 
-            string result = Source.Remove(place, Find.Length).Insert(place, Replace);
+            var result = Source.Remove(place, Find.Length).Insert(place, Replace);
             return result;
         }
     }
