@@ -20,7 +20,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
         internal OptionPage OptionsPage;
 
         private List<Template> _templates;
-        private Template _selectedTemplate;
+        private Template _templateSeleccionado;
 
         public void Initialize()
         {
@@ -28,7 +28,7 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             if (!OptionsPage.TemplatesJson.IsEmpty())
             {
                 _templates = JsonConvert.DeserializeObject<List<Template>>(OptionsPage.TemplatesJson);
-                LoadTemplateButtons(_templates);
+                CargarBotonesDeTemplates(_templates);
             }
             else
                 _templates = new List<Template>();
@@ -41,20 +41,20 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
         }
 
         // Cargar los paquetes del template actual
-        private void LoadPackages(object sender, EventArgs e)
+        private void Cargarpaquetes(object sender, EventArgs e)
         {
             SaveBtn.Enabled = true;
             DeleteBtn.Enabled = true;
 
-            _selectedTemplate = _templates.First(o => o.Nombre == ((Button)sender).Text);
-            TemplateNameTxt.Text = _selectedTemplate.Nombre;
-            PackageBoxTxt.Lines = _selectedTemplate.Paquetes;
+            _templateSeleccionado = _templates.First(o => o.Nombre == ((Button)sender).Text);
+            TemplateNameTxt.Text = _templateSeleccionado.Nombre;
+            PackageBoxTxt.Lines = _templateSeleccionado.Paquetes;
         }
 
         // Nueva template
         private void NewBtn_Click(object sender, EventArgs e)
         {
-            _selectedTemplate = null;
+            _templateSeleccionado = null;
             DeleteBtn.Enabled = false;
 
             TemplateNameTxt.Text = string.Empty;
@@ -67,39 +67,39 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
             var template = new Template() { Nombre = TemplateNameTxt.Text, Paquetes = PackageBoxTxt.Lines };
 
             // Editando
-            if (_selectedTemplate != null)
+            if (_templateSeleccionado != null)
             {
-                if (!ValidateTemplate(template, true))
+                if (!ValidarTemplate(template, true))
                     return;
-                var index = _templates.IndexOf(_selectedTemplate);
+                var index = _templates.IndexOf(_templateSeleccionado);
                 _templates[index] = template;
-                _selectedTemplate = template;
+                _templateSeleccionado = template;
             }
             // Creando
             else
             {
-                if (!ValidateTemplate(template))
+                if (!ValidarTemplate(template))
                     return;
                 _templates.Add(template);
             }
 
-            _selectedTemplate = template;
+            _templateSeleccionado = template;
             DeleteBtn.Enabled = true;
-            LoadTemplateButtons(_templates);
+            CargarBotonesDeTemplates(_templates);
             OptionsPage.TemplatesJson = JsonConvert.SerializeObject(_templates);
         }
 
         // Eliminar template actual
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            _templates.Remove(_selectedTemplate);
-            LoadTemplateButtons(_templates);
+            _templates.Remove(_templateSeleccionado);
+            CargarBotonesDeTemplates(_templates);
             OptionsPage.TemplatesJson = JsonConvert.SerializeObject(_templates);
             NewBtn_Click(sender, e);
         }
 
         // Cargar los botones de los templates
-        private void LoadTemplateButtons(List<Template> templates)
+        private void CargarBotonesDeTemplates(List<Template> templates)
         {
             ButtonsPanel.Controls.Clear();
 
@@ -111,14 +111,14 @@ namespace MultiNuGetPackageInstaller.SettingsWindow
                 var btn = new Button();
                 btn.Text = tt.Nombre;
                 btn.Parent = ButtonsPanel;
-                btn.Click += LoadPackages;
+                btn.Click += Cargarpaquetes;
                 btn.AutoSize = true;
                 btn.Location = new Point(20, i * 30);
             }
         }
 
         // Validar el template que se pretende añadir
-        private bool ValidateTemplate(Template template, bool editing = false)
+        private bool ValidarTemplate(Template template, bool editing = false)
         {
             // Si no estan vacios los campos
             if (template.Nombre.IsEmpty() || !template.Paquetes.Any())
