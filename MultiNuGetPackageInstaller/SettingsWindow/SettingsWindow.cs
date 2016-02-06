@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MultiNuGetPackageInstaller.Helpers;
 using MultiNuGetPackageInstaller.MainCommand;
-using MultiNuGetPackageInstaller.Model;
 using Newtonsoft.Json;
 using NuGet;
 

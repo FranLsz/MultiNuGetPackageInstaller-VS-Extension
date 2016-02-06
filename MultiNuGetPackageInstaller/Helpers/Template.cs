@@ -1,4 +1,4 @@
-﻿namespace MultiNuGetPackageInstaller.Model
+﻿namespace MultiNuGetPackageInstaller.Helpers
 {
     public class Template
     {

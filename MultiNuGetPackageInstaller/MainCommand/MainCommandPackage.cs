@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
-using MultiNuGetPackageInstaller.Model;
+using MultiNuGetPackageInstaller.Helpers;
 using Newtonsoft.Json;
 
 namespace MultiNuGetPackageInstaller.MainCommand
