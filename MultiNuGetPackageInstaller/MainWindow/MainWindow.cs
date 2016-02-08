@@ -17,6 +17,10 @@ namespace MultiNuGetPackageInstaller.MainWindow
 {
     public partial class MainWindow : Form
     {
+        private IServiceProvider ServiceProvider { get; }
+        private MainCommandPackage MainCommandPackage { get; }
+        private static string OnlineNuGetApi => "https://packages.nuget.org/api/v2";
+
         public MainWindow(IServiceProvider serviceProvider, MainCommandPackage mainCommandPackage)
         {
             ServiceProvider = serviceProvider;
@@ -24,14 +28,11 @@ namespace MultiNuGetPackageInstaller.MainWindow
             InitializeComponent();
         }
 
-        private IServiceProvider ServiceProvider { get; }
-        private MainCommandPackage MainCommandPackage { get; }
 
-        private static string OnlineNuGetApi => "https://packages.nuget.org/api/v2";
-
+        // WINDOW LOAD
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            var dte = (DTE) ServiceProvider.GetService(typeof (DTE));
+            var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
             var solucion = dte.Solution as Solution2;
 
             // Se cargan los templates guardados en caso de que existan
@@ -44,7 +45,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
                     box.Text = tt.Nombre;
                     box.Parent = TemplatesPanel;
                     box.AutoSize = true;
-                    box.Location = new Point(20, i2*25); //vertical
+                    box.Location = new Point(20, i2 * 25); //vertical
                     box.Width = 125;
                     box.FlatStyle = FlatStyle.Flat;
                     box.ForeColor = Color.White;
@@ -73,35 +74,12 @@ namespace MultiNuGetPackageInstaller.MainWindow
                 btn.Text = p.Name;
                 btn.Parent = ProjectsPanel;
                 btn.AutoSize = true;
-                btn.Location = new Point(20, i*20); //vertical
+                btn.Location = new Point(20, i * 20); //vertical
                 i++;
             }
         }
 
-        private void CargarPaquetes(object sender, EventArgs e)
-        {
-            PackagesBox.Lines = MainCommandPackage.Templates.First(o => o.Nombre == ((Button) sender).Text).Paquetes;
-        }
-
-
-        private void ReportarProgreso(Tuple<int, string, Color> t)
-        {
-            //ProgressBar.Value = t.Item1;
-            PackagesBox.AgregarLinea(GetHora() + t.Item2, t.Item3);
-        }
-
-        // Enviar progreso con el texto en color
-        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto, Color color)
-        {
-            p.Report(new Tuple<int, string, Color>(progreso, texto, color));
-        }
-
-        // Enviar progreso con el texto sin color
-        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto)
-        {
-            p.Report(new Tuple<int, string, Color>(progreso, texto, Color.Black));
-        }
-
+        // INSTALL BUTTON CLICK
         private async void InstallBtn_Click(object sender, EventArgs e)
         {
             // Valida si el formato de la caja de texto es el correcto
@@ -126,7 +104,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             var proyectosSeleccionados = new List<string>();
             foreach (var c in ProjectsPanel.Controls)
             {
-                if (c.GetType() != typeof (CheckBox)) continue;
+                if (c.GetType() != typeof(CheckBox)) continue;
                 var box = c as CheckBox;
                 if (box.Checked)
                     proyectosSeleccionados.Add(box.Text);
@@ -154,7 +132,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             };
 
             // Se vacia el contenido del TextBox
-            PackagesBox.Lines = new[] {string.Empty};
+            PackagesBox.Lines = new[] { string.Empty };
 
             var indicadorDeProgreso = new Progress<Tuple<int, string, Color>>(ReportarProgreso);
             await IniciarProceso(opciones, indicadorDeProgreso);
@@ -168,8 +146,8 @@ namespace MultiNuGetPackageInstaller.MainWindow
             ClearBtn.Visible = true;
         }
 
-        private async Task IniciarProceso(IReadOnlyDictionary<string, object> opciones,
-            IProgress<Tuple<int, string, Color>> p)
+        // INICIAR PROCESO
+        private async Task IniciarProceso(IReadOnlyDictionary<string, object> opciones, IProgress<Tuple<int, string, Color>> p)
         {
             await Task.Run(() =>
             {
@@ -180,7 +158,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
                 var proyectosSeleccionados = opciones["ProjectNameTarget"] as List<string>;
 
                 // Obtencion del DTE
-                var dte = (DTE) ServiceProvider.GetService(typeof (DTE));
+                var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
                 var solucion = dte.Solution as Solution2;
                 var proyectos = solucion.Projects;
 
@@ -219,8 +197,8 @@ namespace MultiNuGetPackageInstaller.MainWindow
                 }
 
                 Enviar(p, 0, " Connecting to NuGet API...");
-                var repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
-                var componentModel = (IComponentModel) ServiceProvider.GetService(typeof (SComponentModel));
+                var repo = PackageRepositoryFactory.Default.CreateRepository(OnlineNuGetApi);
+                var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
                 var pkgInstalador = componentModel.GetService<IVsPackageInstaller>();
                 Enviar(p, 25, " Connected successfully", Color.Green);
 
@@ -278,6 +256,30 @@ namespace MultiNuGetPackageInstaller.MainWindow
             });
         }
 
+
+        private void CargarPaquetes(object sender, EventArgs e)
+        {
+            PackagesBox.Lines = MainCommandPackage.Templates.First(o => o.Nombre == ((Button)sender).Text).Paquetes;
+        }
+
+        private void ReportarProgreso(Tuple<int, string, Color> t)
+        {
+            //ProgressBar.Value = t.Item1;
+            PackagesBox.AgregarLinea(GetHora() + t.Item2, t.Item3);
+        }
+
+        // Enviar progreso con el texto en color
+        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto, Color color)
+        {
+            p.Report(new Tuple<int, string, Color>(progreso, texto, color));
+        }
+
+        // Enviar progreso con el texto sin color
+        private static void Enviar(IProgress<Tuple<int, string, Color>> p, int progreso, string texto)
+        {
+            p.Report(new Tuple<int, string, Color>(progreso, texto, Color.Black));
+        }
+
         private string GetHora()
         {
             return DateTime.Now.ToString("HH:mm:ss");
@@ -285,7 +287,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
 
         private void ClearBtn_Click(object sender, EventArgs e)
         {
-            PackagesBox.Lines = new[] {string.Empty};
+            PackagesBox.Lines = new[] { string.Empty };
             PackagesBox.ReadOnly = false;
             ClearBtn.Visible = false;
         }

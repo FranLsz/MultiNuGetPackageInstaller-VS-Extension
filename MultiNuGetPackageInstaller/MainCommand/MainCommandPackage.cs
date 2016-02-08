@@ -55,7 +55,6 @@ namespace MultiNuGetPackageInstaller.MainCommand
             {
                 var pagina = (OptionPage)GetDialogPage(typeof(OptionPage));
                 return JsonConvert.DeserializeObject<List<Template>>(pagina.TemplatesJson);
-                ;
             }
 
             set

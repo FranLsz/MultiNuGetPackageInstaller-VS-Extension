@@ -290,7 +290,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Resources\img\social\" />
   </ItemGroup>
   <ItemGroup>
