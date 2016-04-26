@@ -307,6 +307,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Resources\img\ui\go_back.png" />
     <Content Include="Resources\img\ui\info.png" />
     <Content Include="Resources\img\ui\mnpi_btn_icon.png" />
   </ItemGroup>

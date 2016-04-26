@@ -25,6 +25,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
         {
             ServiceProvider = serviceProvider;
             MainCommandPackage = mainCommandPackage;
+            this.MaximizeBox = false;
             InitializeComponent();
         }
 
@@ -50,7 +51,9 @@ namespace MultiNuGetPackageInstaller.MainWindow
                     box.FlatStyle = FlatStyle.Flat;
                     box.ForeColor = Color.White;
                     box.BackColor = Color.FromArgb(47, 47, 47);
-                    ;
+                    box.Cursor = Cursors.Hand;
+                    box.EnabledChanged += InstallBtn_EnabledChanged;
+
                     box.Click += CargarPaquetes;
                     i2++;
                 }
@@ -95,7 +98,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             {
                 if (!rgx.IsMatch(line))
                 {
-                    ErrorLbl.Text = "Incorrect format, the expected is [PACKAGE.NAME] or [PACKAGE.NAME VERSION]";
+                    ErrorLbl.Text = "The expected format is [PACKAGE.NAME] or [PACKAGE.NAME] [VERSION]";
                     return;
                 }
             }
@@ -122,7 +125,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             PackagesBox.ReadOnly = true;
             ProjectsPanel.Enabled = false;
             TemplatesPanel.Enabled = false;
-
+            ExitBtn.Enabled = false;
 
             // Cargamos los paquetes del cuadro de texto y los projectos seleccionados
             var opciones = new Dictionary<string, object>
@@ -144,6 +147,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
             TemplatesPanel.Enabled = true;
             InstallBtn.Enabled = true;
             ClearBtn.Visible = true;
+            ExitBtn.Enabled = true;
         }
 
         // INICIAR PROCESO
@@ -188,8 +192,9 @@ namespace MultiNuGetPackageInstaller.MainWindow
                     // si el packete esta duplicado en el textbox, lanza error
                     if (paquetesParaInstalar.Any(o => o.Key == pkgNombre))
                     {
-                        Enviar(p, 100, "Package " + pkgNombre + " is duplicated", Color.Red);
-                        return;
+                        // Posibles fallos
+                        // Enviar(p, 100, " Package " + pkgNombre + " is duplicated", Color.Red);
+                        continue;
                     }
 
                     // se agrega a la lista de paquetes para instalar
@@ -227,7 +232,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
                                 // se verifica que existe un paquete con esa version
                                 if (pk.All(o => o.Version.ToString() != pkgVersion))
                                 {
-                                    Enviar(p, 25, "Couldn't obtain the version " + pkgVersion + " of " + pkgNombre,
+                                    Enviar(p, 25, " Couldn't obtain the version " + pkgVersion + " of " + pkgNombre,
                                         Color.Red);
                                     break;
                                 }
@@ -247,7 +252,7 @@ namespace MultiNuGetPackageInstaller.MainWindow
                     }
                     catch (Exception ex)
                     {
-                        Enviar(p, 25, "Couldn't install " + pkg.Key + " on your current solution: " + ex.Message,
+                        Enviar(p, 25, " Couldn't install " + pkg.Key + " on your current solution: " + ex.Message,
                             Color.Red);
                     }
                 }
@@ -299,6 +304,24 @@ namespace MultiNuGetPackageInstaller.MainWindow
 
         private void infoBtn_Click(object sender, EventArgs e)
         {
+            HelpPanel.Visible = true;
+            BackBtn.Visible = true;
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            HelpPanel.Visible = false;
+            BackBtn.Visible = false;
+        }
+
+        private void InstallBtn_EnabledChanged(object sender, EventArgs e)
+        {
+            (sender as Button).BackColor = (sender as Button).Enabled ? Color.FromArgb(51, 51, 51) : Color.Gray;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/FranLsz/MultiNuGetPackageInstaller-VS-Extension");
         }
     }
 }
